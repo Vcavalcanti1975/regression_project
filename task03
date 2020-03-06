@@ -27,3 +27,6 @@ for(i in 1:length(cancerdeaths$incidenceRate)){
 
 A_anova <- aov(incidenceRate ~ cancerdeaths$lev_income, cancerdeaths)
 summary(A_anova)
+
+par(mfrow=c(2,2))
+plot(A_anova)
