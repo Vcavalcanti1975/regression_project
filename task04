@@ -1,0 +1,16 @@
+# Do a correlation analysis to see which factors are most highly correlated with cancer incidence rate (and which are correlated with each other!)
+
+install.packages("corrplot")
+require(corrplot)
+
+## the correlation matrix ##
+
+a <- cancerdeaths[-c(2,3,4,8,10,13,14,15,18,19)]
+cora <- cor(a)
+round(cora,2)
+
+## plot the correlation matrix ##
+
+corrplot(cora, type = "upper", tl.srt = 45)
+
+
