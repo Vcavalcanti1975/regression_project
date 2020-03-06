@@ -1,0 +1,46 @@
+#	Conduct hypothesis tests to determine if the following lead to more cancer incidence Use alpha of 5%. 
+#. a.	Recent trend stable vs falling (Column M)
+#. b.	Study Count (Column C). Create a new variable to recode this As High vs Low and do the hypothesis test. Break the two groups at the mean study count.
+
+## hypothesis test about the recenTrend ##
+
+cancerdeaths$recentTrend <- as.factor(cancerdeaths$recentTrend)
+falling <- subset(cancerdeaths, recentTrend == "falling")$incidenceRate
+stable <- subset(cancerdeaths, recentTrend == "stable")$incidenceRate
+
+## The H0 there are no differences between the mean of incidence Rate considering the recenttrend is falling or stable ##
+## The Ha is there are differences ##
+## To reject the Null Hypothesis, the p_value must be below the alpha ##
+
+t.test(falling, stable)
+
+## Hypothesis test about the incidenceRate level ##
+
+## Create the extra column with the level about the mean of studycount ##
+
+## We stablished the mean of cases per location (zip code) ##
+## The we used this mean to create a level ##
+## above the mean, cancer level is High, Below the mean, cancer level is low ##
+
+st_mean <- mean(cancerdeaths$studyCount)
+cancerdeaths$level <- ifelse(cancerdeaths$studyCount >= st_mean, "high", "low")
+
+## The hypothesis test ##
+
+## Then we subset the incidencerate per location with high level and low level ##
+
+high <- subset(cancerdeaths, level =="high")$incidenceRate
+low <- subset(cancerdeaths, level == "low")$incidenceRate
+
+## The H0 hypothesis there are no diferences between the mean of incidenceRate of High levels and Low levels ##
+## THe Ha Hypothesis There are differences ##
+
+t.test(high, low)
+
+
+## Plot of recentTrend per incidence Rate ##
+
+cancerdeaths <- filter(cancerdeaths, (recentTrend == "falling" | recentTrend == "rising" | recentTrend == "stable"))
+ggplot(cancerdeaths, aes(recentTrend,incidenceRate))
+geom_point(aes(color = level), position = "jitter", alpha = 1/4)
+geom_text_repel(data=filter(cancerdeaths, incidenceRate > 700), aes(label=Name))
