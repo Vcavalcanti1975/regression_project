@@ -1,0 +1,29 @@
+#	Create a 4 level indicator variable for Median Income (column G) and conduct an ANOVA comparing the four groups.
+# Four levels might be Very low, low, high, very high or similar
+
+## the median income levels ##
+
+range(cancerdeaths$medIncome)
+
+## divide the result is 04 different levels ##
+
+## very low / low / high / very high ##
+
+cancerdeaths["lev_income"] <- NA
+
+for(i in 1:length(cancerdeaths$incidenceRate)){
+  if(cancerdeaths$medIncome[i] < 48388.75){
+    cancerdeaths$lev_income[i] <- "very low"
+  }else if(cancerdeaths$medIncome[i] > 48388.76 && cancerdeaths$medIncome[i] < 74137.51) {
+    cancerdeaths$lev_income[i] <- "low"
+  }else if(cancerdeaths$medIncome[i] > 74137.52 && cancerdeaths$medIncome[i] < 99886.27) {
+    cancerdeaths$lev_income[i] <- "high"
+  }else{
+  cancerdeaths$lev_income[i] <- "very high"
+  }
+}
+
+## anova ##
+
+A_anova <- aov(incidenceRate ~ cancerdeaths$lev_income, cancerdeaths)
+summary(A_anova)
