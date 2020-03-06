@@ -1,0 +1,33 @@
+# 1.	Which regions of the country are most prone to cancer? 
+
+install.packages("ggplot2")
+install.packages("plyr")
+install.packages("plotly")
+
+require(ggplot2)
+require(plyr)
+require(plotly)
+
+## Absolute Numbers per state #
+
+ggplot(cancerdeaths,aes(State,studyCount)) +
+  geom_col(na.rm=TRUE) + theme(axis.text.x = element_text(angle = 90))
+
+## Incidence Rate per state ploted each county ##
+
+ggplot(cancerdeaths,aes(State, incidenceRate)) +
+   geom_point() +
+   stat_summary(geom = "point", fun.y = "mean", colour = "red", size = 4) +
+   theme(axis.text.x = element_text(angle = 90)) +
+   geom_text_repel(data = . %>% filter(incidenceRate > 1000), aes(label = Name))
+
+## 3D plot Incidence rate per medium income per zip code
+
+fig <- plot_ly(data = cancerdeaths, z = ~medIncome, x = ~zipCode, y = ~incidenceRate, color = ~State, opacity = 0.7) %>%
++ add_markers( marker = list(size = 3))
+fig <- fig %>% layout(title = 'Cancer Incidence in US', scene = list(xaxis = list(title = 'Zip_code'),
++ yaxis = list(title = 'Rate Incidence'),
++ zaxis = list(title = 'Medium Income')))
+
+fig
+
