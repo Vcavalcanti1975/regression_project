@@ -1,0 +1,18 @@
+## Create an actionable regression model for incidence rate. ##
+## It should explain as much of the variability as possible but only identify the most important factors.##
+
+## We developed these 03 models ##
+
+
+
+lm.fit <- lm(incidenceRate ~ log10(PovertyEst) + Name)
+
+plot(lm.fit)
+
+lm.fit1 <- lm(incidenceRate ~ poly(zipCode, 5) + State + log10(PovertyEst) + Name + log10(popEst2015))
+
+plot(lm.fit1)
+
+lm.fit2 <- lm(incidenceRate ~ poly(zipCode, 5) + lev_income)
+
+plot(lm.fit2)
